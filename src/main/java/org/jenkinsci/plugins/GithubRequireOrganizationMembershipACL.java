@@ -121,6 +121,11 @@ public class GithubRequireOrganizationMembershipACL extends ACL {
 				log.finest("Granting Full rights to SYSTEM user.");
 				return true;
 			}
+			
+			if (Stapler == null || Stapler.getCurrentRequest() == null) {
+				log.finest("Granting Full rights, as I couldn't find a request!");
+				return true;
+			}
 
 			if (authenticatedUserName.equals("anonymous")) {
 
@@ -131,17 +136,15 @@ public class GithubRequireOrganizationMembershipACL extends ACL {
 					return true;
 				}
 
-				String requestURI = Stapler.getCurrentRequest()
-						.getOriginalRequestURI();
-
-				if (requestURI.matches(".*github-webhook.*")
-						&& allowGithubWebHookPermission == true) {
+				if (allowGithubWebHookPermission == true && Stapler.getCurrentRequest()
+						.getOriginalRequestURI().matches(".*github-webhook.*")) {
 
 					// allow if the permission was configured.
 
 					if (checkReadPermission(permission)) {
 						log.info("Granting READ access for github-webhook url: "
-								+ requestURI);
+								+ Stapler.getCurrentRequest()
+						.getOriginalRequestURI());
 						return true;
 					}
 
