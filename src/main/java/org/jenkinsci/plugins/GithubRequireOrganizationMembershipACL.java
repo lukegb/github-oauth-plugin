@@ -122,7 +122,7 @@ public class GithubRequireOrganizationMembershipACL extends ACL {
 				return true;
 			}
 			
-			if (Stapler == null || Stapler.getCurrentRequest() == null) {
+			if (Stapler.getCurrentRequest() == null) {
 				log.finest("Granting Full rights, as I couldn't find a request!");
 				return true;
 			}
@@ -152,7 +152,8 @@ public class GithubRequireOrganizationMembershipACL extends ACL {
 				}
 
 				log.finer("Denying anonymous READ permission to url: "
-						+ requestURI);
+						+ Stapler.getCurrentRequest()
+						.getOriginalRequestURI());
 				return false;
 			}
 
